@@ -1,7 +1,7 @@
 // CHANGE THE AWS-ID-ACCOUNT TO YOUR AWS ACCOUNT ID
 
 {
-    "taskDefinitionArn": "arn:aws:ecs:us-east-1:AWS-ID-ACCOUNT:task-definition/otel-sample-python:4",
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:AWS-ID-ACCOUNT:task-definition/otel-sample-python",
     "containerDefinitions": [
         {
             "name": "app",
