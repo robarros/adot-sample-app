@@ -1,0 +1,23 @@
+---
+receivers:
+  otlp:
+    protocols:
+      http:
+      grpc:
+
+exporters:
+  awsxray:
+  awsemf:
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      exporters: [awsxray]
+    metrics:
+      receivers: [otlp]
+      exporters: [awsemf]
+
+
+
+# https://aws-otel.github.io/docs/introduction

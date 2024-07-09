@@ -1,0 +1,143 @@
+// CHANGE THE AWS-ID-ACCOUNT TO YOUR AWS ACCOUNT ID
+
+{
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:AWS-ID-ACCOUNT:task-definition/otel-sample-python:4",
+    "containerDefinitions": [
+        {
+            "name": "app",
+            "image": "robarros/python-auto-instrumentation-sample-app",
+            "cpu": 0,
+            "portMappings": [
+                {
+                    "name": "http",
+                    "containerPort": 8080,
+                    "hostPort": 8080,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "OTEL_RESOURCE_ATTRIBUTES",
+                    "value": "service.name=python-auto-instrumentation-sample-app"
+                }
+            ],    
+            "mountPoints": [],
+            "volumesFrom": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/otel-sample-python",
+                    "awslogs-create-group": "true",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "ecs"
+                },
+                "secretOptions": []
+            },
+            "systemControls": []
+        },
+        {
+            "name": "aws-otel-collector",
+            "image": "amazon/aws-otel-collector",
+            "cpu": 0,
+            "portMappings": [
+                {
+                    "name": "grpc",
+                    "containerPort": 4317,
+                    "hostPort": 4317,
+                    "protocol": "tcp"
+                },
+                {
+                    "name": "http",
+                    "containerPort": 4318,
+                    "hostPort": 4318,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": false,
+            "environment": [],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "secrets": [
+                {
+                    "name": "AOT_CONFIG_CONTENT",
+                    "valueFrom": "arn:aws:ssm:us-east-1:AWS-ID-ACCOUNT:parameter/otel-collector-config"
+                }
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/otel-sample-python",
+                    "awslogs-create-group": "true",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "ecs"
+                },
+                "secretOptions": []
+            },
+            "healthCheck": {
+                "command": [
+                    "CMD",
+                    "/healthcheck"
+                ],
+                "interval": 20,
+                "timeout": 5,
+                "retries": 5,
+                "startPeriod": 120
+            },
+            "systemControls": []
+        }
+    ],
+    "family": "otel-sample-python",
+    "taskRoleArn": "arn:aws:iam::AWS-ID-ACCOUNT:role/ecsTaskExecutionRole",
+    "executionRoleArn": "arn:aws:iam::AWS-ID-ACCOUNT:role/ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "revision": 4,
+    "volumes": [],
+    "status": "ACTIVE",
+    "requiresAttributes": [
+        {
+            "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+        },
+        {
+            "name": "ecs.capability.execution-role-awslogs"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.task-iam-role"
+        },
+        {
+            "name": "ecs.capability.container-health-check"
+        },
+        {
+            "name": "ecs.capability.secrets.ssm.environment-variables"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+        },
+        {
+            "name": "ecs.capability.task-eni"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
+        }
+    ],
+    "placementConstraints": [],
+    "compatibilities": [
+        "EC2",
+        "FARGATE"
+    ],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "1024",
+    "memory": "2048",
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    },
+    "registeredBy": "arn:aws:iam::AWS-ID-ACCOUNT:root",
+    "tags": []
+}
