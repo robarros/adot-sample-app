@@ -138,6 +138,5 @@
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
     },
-    "registeredBy": "arn:aws:iam::AWS-ID-ACCOUNT:root",
     "tags": []
 }
